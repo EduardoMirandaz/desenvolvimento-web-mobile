@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script>
+        
+        let personagens = []
+
+        function showTable(){
+            let listaElementos = document.getElementById("lista");
+            listaElementos.style.display = "inline";
+            let img = document.getElementById("fotoPersonagem");
+            img.style.display = "none"
+        }
+
+        function loadPicture(idPersonagem){
+            let urlApi = 'https://thronesapi.com/api/v2/Characters/' + idPersonagem;
+            let img = document.getElementById("fotoPersonagem");
+            img.setAttribute("src", "");
+
+            let elementoStatus = document.getElementById("status");
+            elementoStatus.innerHTML = "Loading images..."
+            
+            fetch(urlApi)
+                .then((data) => (data.json())) // uma promessa que recebe o dado e retorna uma promessa
+                .then((response) => {
+                    let p = response;
+                    img = document.getElementById("fotoPersonagem");
+                    img.setAttribute("src", p.imageUrl);
+                    img.style.display = "inline"
+                });
+            let listaElementos = document.getElementById("lista");
+            listaElementos.style.display = "none";
+
+        }
+
+        function updatePersonagens(){
+            let listaElementos = document.getElementById("lista");
+            if(listaElementos.hasChildNodes()){
+                listaElementos.removeChild(listaElementos.firstChild);
+            }
+            let tabela = document.createElement("tabela");
+            listaElementos.appendChild(tabela);
+            for(let i = 0; i < personagens.length; i++){
+                let p = personagens[i];
+                let tr = document.createElement("tr");
+                tabela.appendChild(tr);
+                let td = document.createElement("td");
+                tr.appendChild(td)
+                td.innerHTML = p.fullName;
+                let tdBtn = document.createElement("td");
+                tr.appendChild(tdBtn);
+                let btn = document.createElement("button");
+                btn.innerHTML = "+";
+                btn.setAttribute("onclick", "loadPicture(" + p.id + ")"); // ao clicar no botao, chamamos uma função
+                // daria pra fazer até      "document.getElementById(\"pic\"); imgEl.setAttribute(\"src\", \"" + p.imageUrl + "\");";
+                tdBtn.appendChild(btn);
+
+            }
+        }
+
+
+        function carregarPersonagens(){
+            let urlApi = 'https://thronesapi.com/api/v2/Characters';
+            let elementoStatus = document.getElementById("status");
+            elementoStatus.innerHTML = "Loading names..."
+            fetch(urlApi)
+                .then((data) => (data.json()))
+                .then((response) => {
+                    personagens = response;
+                    //elementoStatus.innerHTML = JSON.stringify(personagens);
+                    updatePersonagens();
+                    elementoStatus.innerHTML = "Loaded!!";
+                });
+             // o fetch retorna uma promessa.(promise) o then significa, se voltou tudo ok, execute o que tem dentro            
+            
+            // coisas que estão aqui
+            elementoStatus.innerHTML = "Loaded..."
+            
+        }
+
+    </script>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>GoT</h1>
+    <button onclick="carregarPersonagens()">Carregar</button>
+    <img 
+        src="https://thronesapi.com/assets/images/daenerys.jpg" 
+        alt="Foto do personagem" 
+        id="fotoPersonagem"
+        onclick="showTable()">
+    </img>
+    <span id="lista"></span>
+    <p id="status"></p>
+</body>
+</html>
