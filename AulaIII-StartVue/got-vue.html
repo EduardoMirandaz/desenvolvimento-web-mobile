@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js"></script>
+  </head>
+  <body>
+    <div id="ssc0961">
+      <h1> GoT </h1>
+      <button
+        @click="loadPersonagens();"
+      > Load! </button>
+      <div v-if="loading"> Loading... </div>
+      <div v-if="selPersonagem">
+        <img 
+          @click="selPersonagem = undefined;"
+          :src="selPersonagem.imageUrl">
+        </img>
+        {{ selPersonagem.fullName }}
+      </div>
+      <input v-model="filtro"></input>
+      <input v-model="destaque"></input>
+      <table v-if="personagens && !selPersonagem">
+        <tr v-for="p in personagensFiltro" :key="p.id">
+          <td> {{ p.fullName }} </td>
+          <td>
+            <!-- na atribuição do :class ele vai verificar e, para todos os elementos da lista que retornam true,
+a classe "destacar" será atribuída. -->
+            <button
+              @click="selPersonagem = p;"
+              :class="{destacar: p.fullName.match(destaque)}"
+            > + </button>
+        </tr>
+      </table>
+    </div>
+  </body>
+<script>
+var app = new Vue({
+  el: "#ssc0961",
+  data() {
+    return {
+      selPersonagem: undefined,
+      personagens: [],
+      loading: false,
+      filtro: '',
+      destaque: '',
+    };
+  },
+  methods: {
+    loadPersonagens() {
+        let url = "https://thronesapi.com/api/v2/Characters";
+        this.loading = true;
+        fetch(url)
+            .then((data) => (data.json()))
+            .then((response) => {
+                this.personagens = response;
+          this.loading = false;
+            });
+    },
+  },
+  computed: {
+    personagensFiltro() {
+      return this.personagens.filter((e) => (e.fullName.match(this.filtro)));
+    },
+  }
+});
+</script>
+<style>
+.destacar {
+  background-color: red;
+}
+</style>
+</html>

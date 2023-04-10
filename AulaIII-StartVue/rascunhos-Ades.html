@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js"></script>
+  </head>
+  <body>
+    <div id="ssc0961">
+      <span v-for="i in vezes"> {{ titulo }}-{{ i }} </span> {{ cnt }}
+      <h1
+        :class="titulo"
+        v-if="titulo === 't1' || titulo === 't2'"
+      > GoT </h1>
+      <h1 v-else> No no no!! </h1>
+      <button
+        @click="titulo = 't2';"
+      > Muda Classe </button>
+      <button
+        @click="cnt++;"
+      > inc </button>
+      <button
+        @click="zeraCnt();"
+      > zera </button>
+      <input v-model="titulo"></input>
+    </div>
+  </body>
+<script>
+var app = new Vue({
+  el: "#ssc0961",
+  data() {
+    return {
+      titulo: 't1',
+      cnt: 2,
+    };
+  },
+  methods: {
+    zeraCnt() {
+      this.cnt = 0;
+    },
+  },
+  computed: {
+    vezes() {
+      return this.cnt * 2;
+    }
+  }
+});
+</script>
+<style>
+    .t1 {
+    background-color: red;
+    }
+
+    .t2 {
+    background-color: green;
+    }
+</style>
+</html>

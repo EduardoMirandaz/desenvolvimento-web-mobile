@@ -1,0 +1,67 @@
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Page Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js"></script>
+</head>
+
+<body>
+    <div id="ssc0961">
+        GoT
+        Olá
+        <br>
+
+        <!-- para todo i no contador. -->
+        <span v-for="i in cnt">{{ titulo }}</span> {{cnt}}
+
+        <!-- sempre que colocamos esse ':' indicamos que vamos inserir um código js -->
+        <span :class="titulo" v-if="titulo === 't1' || titulo === 't2' ">span!</span>
+        <span v-else> No no no!</span>
+        5 + 2
+        <!-- scape (um lugar no HTML que você adiciona JS) -->
+        {{ 5 + 2 }}
+
+        <button @click=" titulo='t2'; "> Muda Classe</button>
+        <button @click=" titulo='t2'; "> Incrementa</button>
+        <!-- nesse trecho, alterar o que está escrito no input, muda a variavel "titulo",
+        trazendo mais iteratividade -->
+        <input v-model="titulo"></input>
+    </div>
+</body>
+
+<script>
+    
+    var app = new Vue({
+        el: "#ssc0961",
+        data(){
+            return {
+                titulo: 't1',
+                cnt: 2
+            }
+        },
+        methods: {
+            zeraCnt(){
+                this.cnt = 0;
+            }
+        },
+        computed: {
+            timesTwo() {
+                return this.cnt * 2;
+            }
+        }
+
+    });
+
+</script>
+
+    <style>
+
+        .t1 {
+            background-color: red;
+        }
+
+        .t2 {
+            background-color: green;
+        }
+    </style>
+</html>
